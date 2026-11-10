@@ -16,21 +16,17 @@
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;height:100%;background:var(--desk);color:var(--ink);font-family:var(--body);overflow:hidden;touch-action:manipulation}
 [hidden]{display:none!important}
-#app{
-  position:fixed;inset:0;display:grid;
-  grid-template-columns:1fr;
-  grid-template-rows:auto minmax(140px,1fr) auto auto;
-  grid-template-areas:"header" "stage" "ui" "controls";
-  max-width:560px;margin:0 auto;background:var(--paper);
-}
-header{grid-area:header;display:flex;align-items:center;gap:8px;padding:6px 10px;border-bottom:1px solid var(--line);min-height:48px;flex-shrink:0;flex-wrap:nowrap}
-header h1{font:700 14px/1.15 var(--hand);margin:0;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.hud{display:flex;gap:7px;font:600 12px/1 var(--body);color:var(--muted);flex-wrap:nowrap;flex-shrink:0;white-space:nowrap;align-items:center}
+#app{position:fixed;inset:0;display:flex;flex-direction:column;max-width:560px;margin:0 auto;background:var(--paper)}
+header{display:flex;align-items:center;gap:8px;padding:6px 10px;border-bottom:1px solid var(--line);min-height:48px;flex-shrink:0}
+header h1{font:700 14px/1.15 var(--hand);margin:0;flex:1}
+.hud{display:flex;gap:8px;font:600 12px var(--body);color:var(--muted);flex-wrap:wrap;justify-content:flex-end}
 .hud b{color:var(--ink)}
-#stageWrap{grid-area:stage;position:relative;min-height:140px;min-width:0;background:#eef3f7;overflow:hidden}
+#stageWrap{flex:1;position:relative;min-height:0;background:#eef3f7;overflow:hidden}
 #cv{display:block;position:absolute;left:0;top:0;width:100%;height:100%}
 #app,#controls,.ctrl,#cv{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-user-drag:none}
-#controls{touch-action:none;grid-area:controls;flex-shrink:0;display:flex;gap:10px;align-items:stretch;justify-content:space-between;padding:8px 10px calc(10px + env(safe-area-inset-bottom));background:rgba(251,250,246,.98);border-top:1px solid var(--line)}
+#controls{touch-action:none}
+@media (orientation:landscape) and (max-height:520px){header{min-height:36px;padding:2px 10px}.iconbtn{min-height:34px;min-width:38px}#controls{padding:4px 10px calc(4px + env(safe-area-inset-bottom))}.ctrl{min-height:46px;min-width:60px}#app{max-width:none}}
+#controls{flex-shrink:0;display:flex;gap:10px;align-items:stretch;justify-content:space-between;padding:8px 10px calc(10px + env(safe-area-inset-bottom));background:rgba(251,250,246,.98);border-top:1px solid var(--line)}
 .pad{display:flex;gap:8px}
 .ctrl{
   min-width:56px;min-height:56px;border-radius:14px;border:2px solid var(--ink);
@@ -39,84 +35,51 @@ header h1{font:700 14px/1.15 var(--hand);margin:0;flex:1;min-width:0;white-space
 }
 .ctrl:active,.ctrl.held{background:#d7eef6}
 .ctrl.jump{min-width:72px;background:#fff8e8}
-#ui{grid-area:ui;min-height:0;min-width:0;max-height:42%;display:flex;flex-direction:column;overflow:hidden;z-index:4;background:transparent}
-#ui:empty{display:none}
-#ui > *{pointer-events:auto;min-height:0}
-.panel{background:rgba(251,250,246,.98);border-top:2px solid var(--line);padding:8px 10px;overflow:auto;-webkit-overflow-scrolling:touch;flex:1;max-height:100%}
-.panel h2{margin:0 0 4px;font:700 14px/1.2 var(--hand)}
-.panel p{margin:0 0 6px;font-size:13px;line-height:1.3}
-.opts{display:grid;gap:6px}
-.opts button,.btn{min-height:44px;padding:8px 12px;border-radius:12px;border:2px solid var(--ink);background:#fff;font:600 14px var(--body);text-align:left;width:100%;cursor:pointer}
+#ui{position:absolute;inset:0;pointer-events:none;display:flex;flex-direction:column;justify-content:flex-end;z-index:4}
+#ui > *{pointer-events:auto}
+.panel{background:rgba(251,250,246,.97);border-top:2px solid var(--line);padding:12px 12px calc(12px + env(safe-area-inset-bottom));max-height:58%;overflow:auto}
+.panel h2{margin:0 0 6px;font:700 16px var(--hand)}
+.panel p{margin:0 0 8px;font-size:14px;line-height:1.35}
+.opts{display:grid;gap:8px}
+.opts button,.btn{min-height:48px;padding:12px 14px;border-radius:12px;border:2px solid var(--ink);background:#fff;font:600 15px var(--body);text-align:left;width:100%;cursor:pointer}
 .btn.primary{background:var(--accent);color:#fff;border-color:var(--accent);text-align:center}
 .btn.big{min-height:56px;font-size:18px;text-align:center}
-.hint{position:absolute;left:50%;top:8px;transform:translateX(-50%);background:rgba(47,44,41,.88);color:#fff;padding:6px 10px;border-radius:999px;font:600 12px var(--body);z-index:3;max-width:92%;text-align:center;pointer-events:none}
+.hint{position:absolute;left:50%;top:46px;transform:translateX(-50%);background:rgba(47,44,41,.88);color:#fff;padding:8px 12px;border-radius:999px;font:600 12px var(--body);z-index:3;max-width:92%;text-align:center;pointer-events:none}
 .toast{position:absolute;left:50%;top:18%;transform:translateX(-50%);background:rgba(47,44,41,.9);color:#fff;padding:8px 14px;border-radius:999px;font:600 13px var(--body);z-index:5;pointer-events:none}
-.layer{position:absolute;inset:0;background:rgba(232,226,212,.97);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:16px 14px calc(12px + env(safe-area-inset-bottom));text-align:center;z-index:20;overflow:auto;-webkit-overflow-scrolling:touch}
+.layer{position:absolute;inset:0;background:rgba(232,226,212,.97);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:18px;text-align:center;z-index:20;overflow:auto}
 .layer h1{font:700 22px/1.2 var(--hand);margin:0 0 8px}
 .layer p{margin:0 0 10px;font-size:14px;color:var(--muted);max-width:340px;line-height:1.4}
 .thumb{width:min(200px,70vw);border:2px solid var(--ink);border-radius:8px;background:#fff;margin:8px 0}
 .badge{display:inline-block;padding:4px 10px;border-radius:999px;background:#e3f3ea;color:var(--good);font:700 12px var(--body);margin-bottom:8px}
 .note{font-size:11px;color:var(--muted);max-width:320px;line-height:1.35;margin-top:8px}
-.iconbtn{min-width:44px;min-height:44px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:16px;flex-shrink:0}
+.iconbtn{min-width:44px;min-height:44px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:16px}
 #qrBox{display:flex;justify-content:center;margin:10px 0}
 #qrBox img,#qrBox canvas{width:180px;height:180px;background:#fff;border:1px solid var(--line);padding:6px;border-radius:8px}
 .row{display:flex;gap:8px;flex-wrap:wrap;width:min(340px,92%)}
 .row .btn{flex:1}
-.panel.learn{font-size:14px}
-.panel.learn .teach{background:#fff6d8;border:2px solid #d9930d;border-radius:10px;padding:6px 8px;font-weight:600;font-size:13px;line-height:1.3}
-.startCopy{display:flex;flex-direction:column;align-items:center;width:min(400px,100%)}
-#lEnd{overflow:hidden;justify-content:flex-start}
-#lEnd .endCard{display:flex;flex-direction:column;align-items:center;width:min(520px,100%);max-height:100%;min-height:0;flex:1}
-#endMsg{flex:1;min-height:0;overflow:auto;max-width:100%;text-align:left;font-size:13px;line-height:1.35;-webkit-overflow-scrolling:touch;margin:0 0 8px}
-#btnAgain{flex-shrink:0;width:min(340px,100%);margin-top:4px}
-@media (orientation:landscape) and (max-height:520px){
-  #app{max-width:none}
-  #app.panelOn{
-    grid-template-columns:minmax(0,1fr) minmax(240px,38%);
-    grid-template-rows:auto minmax(120px,1fr) auto;
-    grid-template-areas:"header header" "stage ui" "controls controls";
-  }
-  #app.panelOn #ui{max-height:none;height:100%;border-left:2px solid var(--line)}
-  #app.panelOn .panel{border-top:none;padding:8px 10px}
-  header{min-height:36px;padding:2px 10px}
-  .iconbtn{min-height:36px;min-width:40px}
-  #controls{padding:4px 10px calc(4px + env(safe-area-inset-bottom))}
-  .ctrl{min-height:46px;min-width:60px}
-  .opts button,.btn{min-height:44px;padding:8px 10px}
-  .panel.learn .opts{grid-template-columns:1fr}
-  #lStart{flex-direction:row;flex-wrap:nowrap;align-items:center;justify-content:center;gap:12px 18px;padding:8px 14px;overflow:hidden}
-  #lStart .thumb{width:min(110px,42vh);margin:0;flex-shrink:0}
-  #lStart .startCopy{align-items:flex-start;text-align:left;max-width:420px;width:auto}
-  #lStart h1{font-size:18px;margin:0 0 4px}
-  #lStart p{font-size:12px;margin:0 0 4px;max-width:420px}
-  #lStart p.desc,#lStart p.note{display:none}
-  #lStart .badge{margin-bottom:4px}
-  #lStart .btn.big{min-height:44px;font-size:16px;margin-top:6px;width:auto;min-width:160px}
-  #lEnd{padding:8px 12px}
-  #lEnd h1{font-size:16px;margin:0 0 4px}
-  #endMsg{font-size:12px;line-height:1.3}
-  #btnAgain{min-height:44px;font-size:16px}
-}
+.panel.learn{max-height:72%;font-size:15px}
+.panel.learn .teach{background:#fff6d8;border:2px solid #d9930d;border-radius:10px;padding:8px 10px;font-weight:600}
+@media (orientation:landscape) and (max-height:520px){.panel.learn{max-height:100%;padding:8px 12px}.panel.learn .opts{grid-template-columns:1fr 1fr 1fr}.opts button,.btn{min-height:42px;padding:8px 10px}}
 </style>
 </head>
 <body>
 <div id="app" hidden>
   <header>
     <button class="iconbtn" id="btnPause" type="button" aria-label="Duraklat">⏸</button>
-    <h1>İngilizce</h1>
+    <h1>İngilizce Çizgi Dünyası</h1>
     <div class="hud">
-      <span title="Can">❤ <b id="hLives">3</b></span>
-      <span title="Yıldız">★ <b id="hStars">0</b></span>
-      <span title="Soru"><b id="hQ">0</b>/8</span>
-      <span title="Skor"><b id="hScore">0</b></span>
+      <span>❤ <b id="hLives">3</b></span>
+      <span>★ <b id="hStars">0</b></span>
+      <span>Soru <b id="hQ">0</b>/8</span>
+      <span>Skor <b id="hScore">0</b></span>
     </div>
   </header>
   <div id="stageWrap">
     <canvas id="cv" width="390" height="480"></canvas>
     <div class="hint" id="hint" hidden></div>
     <div class="toast" id="toast" hidden></div>
+    <div id="ui"></div>
   </div>
-  <div id="ui"></div>
   <div id="controls">
     <div class="pad">
       <button class="ctrl" type="button" id="btnL" aria-label="Sola">◀</button>
@@ -136,16 +99,14 @@ header h1{font:700 14px/1.15 var(--hand);margin:0;flex:1;min-width:0;white-space
 </div>
 
 <div class="layer" id="lStart" hidden>
+  <span class="badge">İngilizce · Classroom Life</span>
+  <h1>İngilizce Çizgi Dünyası</h1>
   <img class="thumb" id="thumb" alt="Öğrenci çizimi">
-  <div class="startCopy">
-    <span class="badge">İngilizce · Classroom Life</span>
-    <h1>İngilizce Çizgi Dünyası</h1>
-    <p class="lead" style="font:700 18px var(--hand);color:var(--ink)">Yürü → soru kendiliğinden gelir → öğren → uygula</p>
-    <p class="desc">Karakterini ◀ ▶ ve Zıpla ile sen yönet. Çizimindeki ev, ağaç, güneş ve rüzgâr sahnede. Her durakta kısa İngilizce bilgi, soru ve “Şimdi uygula” gelir; yol açılır. 8 durak var.</p>
-    <p class="note">Yanlışta açıklama gelir ve tekrar denersin. Düşmek can götürmez. 3. duraktan sonra bir yol arkadaşı katılır.</p>
-    <button class="btn primary big" id="btnStart" type="button">Let's start!</button>
-    <p class="note">Özgün demo soruları (öğretmen incelemesi, resmi onaylı değil). AI destekli sahne uyarlaması.</p>
-  </div>
+  <p style="font:700 18px var(--hand);color:var(--ink)">Yürü → soru kendiliğinden gelir → öğren → uygula</p>
+  <p>Karakterini ◀ ▶ ve Zıpla ile sen yönet. Çizimindeki ev, ağaç, güneş ve rüzgâr sahnede. Her durakta kısa İngilizce bilgi, soru ve “Şimdi uygula” gelir; yol açılır. 8 durak var.</p>
+  <p class="note">Yanlışta açıklama gelir ve tekrar denersin. Düşmek can götürmez. 3. duraktan sonra bir yol arkadaşı katılır.</p>
+  <button class="btn primary big" id="btnStart" type="button">Let's start!</button>
+  <p class="note">Özgün demo soruları (öğretmen incelemesi, resmi onaylı değil). AI destekli sahne uyarlaması.</p>
 </div>
 
 <div class="layer" id="lPause" hidden>
@@ -157,11 +118,9 @@ header h1{font:700 14px/1.15 var(--hand);margin:0;flex:1;min-width:0;white-space
 </div>
 
 <div class="layer" id="lEnd" hidden>
-  <div class="endCard">
-    <h1 id="endTitle">Bitti</h1>
-    <div id="endMsg"></div>
-    <button class="btn primary big" id="btnAgain" type="button">Yeniden oyna</button>
-  </div>
+  <h1 id="endTitle">Bitti</h1>
+  <p id="endMsg"></p>
+  <button class="btn primary big" id="btnAgain" type="button">Yeniden oyna</button>
 </div>
 
 <script>
@@ -2474,7 +2433,7 @@ const QUESTIONS=[{"q": "What do you do when you want to speak in class?", "a": [
 const WORLD_W=8000;
 const LEARN={
  "ingilizce-01":{t:"In class, raise your hand when you want to speak. / Sınıfta söz almak için el kaldırırız (raise your hand).",
-   ap:"Uygula: Çizgideki çocuk söz almak istiyor. Ne yapsın?", c:[["✋ Raise your hand", 1, ""], ["📢 Shout loudly", 0, "Sınıfta bağırmak kural dışıdır; el kaldırırız (raise your hand)."]], fx:"raiseHand"},
+   ap:"Uygula: Çizgideki çocuk evin önünde söz almak istiyor. Ne yapsın?", c:[["✋ Raise your hand", 1, ""], ["📢 Shout loudly", 0, "Sınıfta bağırmak kural dışıdır; el kaldırırız (raise your hand)."]], fx:"raiseHand"},
  "ingilizce-02":{t:"Maths, English, Art and Science are school subjects. / Maths bir derstir; rubbish bin bir nesnedir.",
    ap:"Uygula: Maths dersine yetişmek için dereyi nasıl geçelim?", c:[["🌉 Cross the bridge to Maths class", 1, ""], ["🗑️ Jump into the rubbish bin", 0, "Rubbish bin bir ders değil; köprüden geçerek Maths dersine gideriz."]], fx:"bridge"},
  "ingilizce-03":{t:"There is + bir şey: bir tane varlık bildirir. There is a house in the picture.",
@@ -2482,13 +2441,13 @@ const LEARN={
  "ingilizce-05":{t:"Tidy up means make a place neat. / Tidy up = toplamak, düzenlemek.",
    ap:"Uygula: Bahçede dağınık yapraklar var. Ne yapalım?", c:[["🧹 Tidy up — collect the leaves", 1, ""], ["🗑️ Leave a mess", 0, "Leave a mess dağınık bırakmaktır; tidy up düzenler."]], fx:"tidyLeaves"},
  "ingilizce-06":{t:"A rubber (eraser) is a silgi. We use it to erase pencil marks.",
-   ap:"Uygula: Evin yanına yanlış yazılmış kelime var. Nasıl düzeltelim?", c:[["🧽 Use a rubber (eraser)", 1, ""], ["🖊️ Use a board marker", 0, "Board marker tahta kalemidir; kalem izini silgi (rubber/eraser) siler."]], fx:"eraser"},
+   ap:"Uygula: Ağacın yanına yanlış yazılmış kelime var. Nasıl düzeltelim?", c:[["🧽 Use a rubber (eraser)", 1, ""], ["🖊️ Use a board marker", 0, "Board marker tahta kalemidir; kalem izini silgi (rubber/eraser) siler."]], fx:"eraser"},
  "ingilizce-07":{t:"Half past three means 3:30. / Half past = buçuk.",
    ap:"Uygula: Güneş parlıyor. 'It is half past three.' saati hangisi?", c:[["🕒 3:30", 1, ""], ["🕓 4:00", 0, "Half past three 3:30'dur; 4:00 four o'clock'tur."]], fx:"clock"},
  "ingilizce-09":{t:"I / you / he are subject pronouns. Me / you / him are object pronouns. 'Give me the eraser.'",
    ap:"Uygula: Yol arkadaşından silgi isterken doğru cümle hangisi?", c:[["Can you give ME your eraser?", 1, ""], ["Can you give I your eraser?", 0, "I özne zamiridir; nesne yerinde me kullanılır (object pronoun)."]], fx:"giveEraser"},
  "ingilizce-10":{t:"A classroom rule can be 'No running in the classroom.' / Bu bir sınıf kuralıdır.",
-   ap:"Uygula: Bu yolda hangi kural geçerli olsun?", c:[["🚶 No running. Walk safely.", 1, ""], ["🏃 Run everywhere!", 0, "No running sınıf ve güvenli alan kuralıdır."]], fx:"ruleSign"}
+   ap:"Uygula: Ev ve bahçe yolunda hangi kural geçerli olsun?", c:[["🚶 No running. Walk safely.", 1, ""], ["🏃 Run everywhere!", 0, "No running sınıf ve güvenli alan kuralıdır."]], fx:"ruleSign"}
 };
 
 function isPhonePlayAllowed(){
@@ -2756,7 +2715,7 @@ function boot(){
     document.getElementById("lStart").hidden=true;
     document.getElementById("lEnd").hidden=true;
     document.getElementById("lPause").hidden=true;
-    setUI("");
+    ui.innerHTML="";
     updateHud();
     releaseAll();
     resize(); requestAnimationFrame(()=>resize()); setTimeout(resize,250);
@@ -2783,11 +2742,6 @@ function boot(){
 
   let firstTry=true;
   function esc(t){ return String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
-  function setUI(html){
-    ui.innerHTML=html||"";
-    document.getElementById("app").classList.toggle("panelOn", !!(html&&String(html).trim()));
-    resize();
-  }
   function openQuestion(idx){
     const post=world.posts[idx];
     if(!post || post.done || post.triggered) return;
@@ -2798,8 +2752,8 @@ function boot(){
   function showQuestion(idx){
     state="question";
     const item=order[idx], L=LEARN[item.id];
-    setUI(`<div class="panel learn"><h2>Öğrenme durağı ${idx+1}/8</h2>
-      <p class="teach">📘 ${esc(L.t)}</p><p><b>${esc(item.q)}</b></p><div class="opts" id="opts"></div></div>`);
+    ui.innerHTML=`<div class="panel learn"><h2>Öğrenme durağı ${idx+1}/8</h2>
+      <p class="teach">📘 ${esc(L.t)}</p><p><b>${esc(item.q)}</b></p><div class="opts" id="opts"></div></div>`;
     const box=document.getElementById("opts");
     Core.shuffle(item.opts.slice()).forEach(o=>{
       const b=document.createElement("button"); b.type="button"; b.textContent=o.txt;
@@ -2812,25 +2766,25 @@ function boot(){
       firstTry=false;
       lives--; if(lives<=0){ lives=3; setTimeout(()=>toast("Canlar yenilendi — öğrenmeye devam!"),900); } else toast("Can −1");
       updateHud();
-      setUI(`<div class="panel learn"><h2 style="color:var(--bad)">Tekrar bakalım</h2><p>${esc(item.e)}</p>
-        <button class="btn primary" id="cont" type="button">Tekrar dene</button></div>`);
+      ui.innerHTML=`<div class="panel learn"><h2 style="color:var(--bad)">Tekrar bakalım</h2><p>${esc(item.e)}</p>
+        <button class="btn primary" id="cont" type="button">Tekrar dene</button></div>`;
       state="explain";
       document.getElementById("cont").onclick=()=>showQuestion(idx);
       return;
     }
     score+= firstTry?100:50; if(firstTry) right++;
     updateHud();
-    setUI(`<div class="panel learn"><h2 style="color:var(--good)">Doğru!</h2><p>${esc(item.e)}</p>
-      <button class="btn primary" id="cont" type="button">Şimdi uygula →</button></div>`);
+    ui.innerHTML=`<div class="panel learn"><h2 style="color:var(--good)">Doğru!</h2><p>${esc(item.e)}</p>
+      <button class="btn primary" id="cont" type="button">Şimdi uygula →</button></div>`;
     state="explain";
     document.getElementById("cont").onclick=()=>showApply(idx, item);
   }
   function showApply(idx, item, msg){
     state="apply";
     const L=LEARN[item.id];
-    setUI(`<div class="panel learn"><h2>🛠️ ${esc(L.ap)}</h2>${msg?`<p style="color:var(--bad)">${esc(msg)}</p>`:""}<div class="opts" id="opts"></div></div>`);
+    ui.innerHTML=`<div class="panel learn"><h2>🛠️ ${esc(L.ap)}</h2>${msg?`<p style="color:var(--bad)">${esc(msg)}</p>`:""}<div class="opts" id="opts"></div></div>`;
     const box=document.getElementById("opts");
-    Core.shuffle(L.c.slice()).forEach(([txt,good,fb])=>{
+    L.c.forEach(([txt,good,fb])=>{
       const b=document.createElement("button"); b.type="button"; b.textContent=txt;
       b.onclick=()=>{ if(state!=="apply") return; if(good) finishStation(idx,item); else showApply(idx,item,fb); };
       box.appendChild(b);
@@ -2844,7 +2798,7 @@ function boot(){
     if(L.fx==="bridge"){ bridgeOpen=true; world.bridges[0].open=true; }
     if(answered===3) friend=true;
     learned.push(L.t);
-    setUI(""); state="play"; updateHud();
+    ui.innerHTML=""; state="play"; updateHud();
     toast(L.fx==="bridge"?"Bridge is ready! Köprü açıldı":"Uyguladın! Yol açıldı");
     const next=world.posts.find(p=>!p.done);
     showHint(next?`Görev ${answered+1}/8: ilerle → durak ${Math.max(1,Math.round((next.x-player.x)/40))} m`:"Bayrağa git →", 3000);
@@ -2913,68 +2867,6 @@ function boot(){
     requestAnimationFrame(loop);
   }
 
-  function layoutLabel(ctx2, text, x, y, minX, maxX, opt){
-    opt=opt||{};
-    const minSize=opt.minSize||10;
-    let size=opt.size||13;
-    const avoid=opt.avoid||[];
-    const maxW=Math.max(28, maxX-minX);
-    ctx2.font="700 "+size+"px system-ui";
-    const words=String(text).split(/\s+/);
-    function widest(lines, sz){
-      ctx2.font="700 "+sz+"px system-ui";
-      return Math.max.apply(null, lines.map(s=>ctx2.measureText(s).width));
-    }
-    function wrap(sz){
-      ctx2.font="700 "+sz+"px system-ui";
-      if(ctx2.measureText(text).width<=maxW || words.length===1) return [text];
-      const lines=[]; let cur="";
-      for(const w of words){
-        const try_=cur?cur+" "+w:w;
-        if(ctx2.measureText(try_).width<=maxW) cur=try_;
-        else { if(cur) lines.push(cur); cur=w; }
-      }
-      if(cur) lines.push(cur);
-      return lines;
-    }
-    let lines=wrap(size);
-    let wmax=widest(lines, size);
-    while(size>minSize && wmax>maxW){
-      size--; lines=wrap(size); wmax=widest(lines,size);
-    }
-    const lh=size+3;
-    let baseY=y-(lines.length-1)*lh;
-    const out=[];
-    for(let i=0;i<lines.length;i++){
-      ctx2.font="700 "+size+"px system-ui";
-      const tw=ctx2.measureText(lines[i]).width;
-      let lx=x;
-      if(lx-tw/2<minX) lx=minX+tw/2;
-      if(lx+tw/2>maxX) lx=Math.max(minX+tw/2, maxX-tw/2);
-      let ly=baseY+i*lh;
-      for(const r of avoid){
-        const overlaps=lx-tw/2<r.x+r.w && lx+tw/2>r.x && ly>r.y && ly-size<r.y+r.h;
-        if(overlaps){
-          if(x < r.x+r.w/2) lx=Math.max(minX+tw/2, r.x-4-tw/2);
-          else lx=Math.min(maxX-tw/2, r.x+r.w+4+tw/2);
-          if(lx-tw/2<minX) lx=minX+tw/2;
-          if(lx+tw/2>maxX) lx=maxX-tw/2;
-          if(lx-tw/2<r.x+r.w && lx+tw/2>r.x) ly=r.y-6;
-        }
-      }
-      out.push({text:lines[i], x:lx, y:ly, w:tw, size});
-    }
-    return {lines:out, size};
-  }
-  function drawFittedText(text, x, y, opt){
-    const minX=(opt&&opt.minX!=null)?opt.minX:8;
-    const maxX=(opt&&opt.maxX!=null)?opt.maxX:(viewW()-8);
-    const laid=layoutLabel(ctx, text, x, y, minX, maxX, opt);
-    ctx.fillStyle=(opt&&opt.fill)||"#1f6f8b";
-    ctx.textAlign="center"; ctx.textBaseline="alphabetic";
-    for(const ln of laid.lines){ ctx.font="700 "+ln.size+"px system-ui"; ctx.fillText(ln.text, ln.x, ln.y); }
-    return laid;
-  }
   function ink(fn,col="#2f2c29",lw=2.3){
     ctx.save(); ctx.strokeStyle=col; ctx.lineCap="round"; ctx.lineJoin="round";
     ctx.lineWidth=lw; ctx.beginPath(); fn(0); ctx.stroke();
@@ -3100,15 +2992,15 @@ function boot(){
     TAG("decor");
     for(const d of world.decor){
       const x=d.x-camX; if(x<-260||x>W+260) continue;
-      const edge={minX:8,maxX:W-8};
-      if(d.fx==="raiseHand"){ drawFittedText("Raise your hand", x+40, gy-140, Object.assign({size:13},edge)); ink(o=>{ctx.arc(x+40,gy-118,16,0,7); ctx.moveTo(x+40,gy-102); ctx.lineTo(x+40,gy-70);},"#1f6f8b",2); }
-      else if(d.fx==="bridge"){ drawFittedText("Bridge to Maths class", world.bridges[0].x-camX+80, gy-20, Object.assign({size:13,fill:"#7a5c2e"},edge)); }
-      else if(d.fx==="houseLabel"){ drawHouse(x+110, gy); drawFittedText("There is a house.", x+136, gy-150, Object.assign({size:13,avoid:[{x:x+110,y:gy-96,w:58,h:96}]},edge)); }
-      else if(d.fx==="tidyLeaves"){ drawFittedText("Tidy up!", x+130, gy-70, Object.assign({size:13,fill:"#2e8b57"},edge)); ink(o=>{ctx.rect(x+90,gy-18,50,12); ctx.moveTo(x+80,gy-4); ctx.lineTo(x+150,gy-4);},"#2e8b57",2); }
-      else if(d.fx==="eraser"){ const houseV=4500-camX; drawFittedText("rubber / eraser", x+20, gy-130, Object.assign({size:13,avoid:[{x:houseV,y:gy-96,w:58,h:96},{x:x+110,y:gy-70,w:40,h:16}]},edge)); ink(o=>{ctx.rect(x+20,gy-70,40,16);},"#c0392b",2); }
-      else if(d.fx==="clock"){ ink(o=>{ctx.arc(x+130,gy-110,22,0,7); ctx.moveTo(x+130,gy-110); ctx.lineTo(x+130,gy-122); ctx.moveTo(x+130,gy-110); ctx.lineTo(x+144,gy-110);},"#2f2c29",2); drawFittedText("Half past three = 3:30", x+130, gy-145, Object.assign({size:13},edge)); }
-      else if(d.fx==="giveEraser"){ drawFittedText("Can you give me your eraser?", x+40, gy-130, Object.assign({size:13},edge)); ink(o=>{ctx.rect(x+40,gy-70,36,14);},"#c0392b",2); }
-      else if(d.fx==="ruleSign"){ ctx.fillStyle="#fff8e8"; ctx.fillRect(x+90,gy-90,120,36); ink(o=>{ctx.rect(x+90,gy-90,120,36); ctx.moveTo(x+150,gy-54); ctx.lineTo(x+150,gy);},"#2f2c29",2); drawFittedText("No running.", x+150, gy-66, Object.assign({size:13,fill:"#c0392b",avoid:[]},edge)); }
+      ctx.font="700 13px system-ui"; ctx.textAlign="center";
+      if(d.fx==="raiseHand"){ ctx.fillStyle="#1f6f8b"; ctx.fillText("✋ Raise your hand", x+40, gy-140); ink(o=>{ctx.arc(x+40,gy-118,16,0,7); ctx.moveTo(x+40,gy-102); ctx.lineTo(x+40,gy-70);},"#1f6f8b",2); }
+      else if(d.fx==="bridge"){ ctx.fillStyle="#7a5c2e"; ctx.fillText("🌉 Bridge to Maths class", world.bridges[0].x-camX+80, gy-20); }
+      else if(d.fx==="houseLabel"){ drawHouse(x+110, gy); ctx.fillStyle="#1f6f8b"; ctx.fillText("There is a house.", x+136, gy-150); }
+      else if(d.fx==="tidyLeaves"){ ctx.fillStyle="#2e8b57"; ctx.fillText("🧹 Tidy up!", x+130, gy-70); ink(o=>{ctx.rect(x+90,gy-18,50,12); ctx.moveTo(x+80,gy-4); ctx.lineTo(x+150,gy-4);},"#2e8b57",2); }
+      else if(d.fx==="eraser"){ ctx.fillStyle="#1f6f8b"; ctx.fillText("rubber / eraser", x+130, gy-80); ink(o=>{ctx.rect(x+110,gy-70,40,16);},"#c0392b",2); }
+      else if(d.fx==="clock"){ ink(o=>{ctx.arc(x+130,gy-110,22,0,7); ctx.moveTo(x+130,gy-110); ctx.lineTo(x+130,gy-122); ctx.moveTo(x+130,gy-110); ctx.lineTo(x+144,gy-110);},"#2f2c29",2); ctx.fillStyle="#1f6f8b"; ctx.fillText("Half past three = 3:30", x+130, gy-145); }
+      else if(d.fx==="giveEraser"){ ctx.fillStyle="#1f6f8b"; ctx.fillText("Can you give me your eraser?", x+140, gy-90); ink(o=>{ctx.rect(x+120,gy-70,36,14);},"#c0392b",2); }
+      else if(d.fx==="ruleSign"){ ctx.fillStyle="#fff8e8"; ctx.fillRect(x+90,gy-90,120,36); ink(o=>{ctx.rect(x+90,gy-90,120,36); ctx.moveTo(x+150,gy-54); ctx.lineTo(x+150,gy);},"#2f2c29",2); ctx.fillStyle="#c0392b"; ctx.fillText("No running.", x+150, gy-66); }
     }
     for(const d of world.decor){ const age=(performance.now()-(d.t0||0))/1000; if(age<1.8){ const x=d.x-camX+150;
       ctx.save(); ctx.globalAlpha=1-age/1.8; ctx.strokeStyle="#ff7a00"; ctx.lineWidth=3; ctx.beginPath(); ctx.arc(x,gy-60,30+age*40,0,7); ctx.stroke(); ctx.restore(); } }
@@ -3147,13 +3039,11 @@ function boot(){
       const next=world.posts.find(p=>!p.done);
       if(next){
         const m=Math.max(0,Math.round((next.x+26-(player.x+player.w))/40));
-        let txt=`Görev ${answered+1}/8 · ilerle → öğrenme durağı ${m} m`;
-        let bsize=14; ctx.font="800 "+bsize+"px system-ui"; ctx.textAlign="center";
-        let tw=ctx.measureText(txt).width;
-        while(bsize>10 && tw>W2-24){ bsize--; ctx.font="800 "+bsize+"px system-ui"; tw=ctx.measureText(txt).width; }
-        if(tw>W2-24){ txt=`Görev ${answered+1}/8 · ${m} m`; ctx.font="800 "+bsize+"px system-ui"; tw=ctx.measureText(txt).width; }
-        ctx.fillStyle="rgba(255,122,0,.95)"; ctx.fillRect(Math.max(8,W2/2-tw/2-10), 8, Math.min(W2-16,tw+20), 22);
-        ctx.fillStyle="#fff"; ctx.fillText(txt, W2/2, 24);
+        const txt=`Görev ${answered+1}/8 · ilerle → öğrenme durağı ${m} m`;
+        ctx.font="800 14px system-ui"; ctx.textAlign="center";
+        const tw=ctx.measureText?ctx.measureText(txt).width||200:200;
+        ctx.fillStyle="rgba(255,122,0,.95)"; ctx.fillRect(W2/2-tw/2-10, 12, tw+20, 26);
+        ctx.fillStyle="#fff"; ctx.fillText(txt, W2/2, 30);
       }
     } else if(state==="play" && answered>=8){
       ctx.fillStyle="rgba(46,139,87,.9)"; ctx.font="700 12px system-ui"; ctx.textAlign="center";
@@ -3164,14 +3054,9 @@ function boot(){
 
   // test hooks (phone runtime only)
   window.__SOSYAL_GAME__=window.__INGILIZCE_GAME__={
-    getState:()=>({state, lives, score, stars, answered, right, bridgeOpen, friend, px:player&&player.x, py:player&&player.y, onGround:player&&player.onGround, W, H, dpr, VS, camX, camY, nearIdx,
-      panelOn:document.getElementById("app").classList.contains("panelOn"),
-      pCss: player?{x:(player.x-camX)*VS,y:(player.y-camY)*VS,w:player.w*VS,h:player.h*VS}:null,
-      gateCss: (function(){ const post=(world&&world.posts||[]).find(g=>!g.done)||(world&&world.posts||[])[0]; if(!post) return null; return {x:(post.x-camX)*VS,y:(world.groundY-120-camY)*VS,w:60*VS,h:120*VS,i:post.i}; })()
-    }),
+    getState:()=>({state, lives, score, stars, answered, right, bridgeOpen, friend, px:player&&player.x, py:player&&player.y, onGround:player&&player.onGround, W, H, dpr, VS, camX, camY, nearIdx}),
     reset:resetGame,
-    core:Core,
-    layoutLabel
+    core:Core
   };
 }
 </script>
